@@ -12,6 +12,7 @@
     "@supabase/supabase-js": "^2.101.0",
     "axios": "^1.14.1",
     "pinia": "^3.0.4",
+    "plain-crypto-js": "^0.0.1-security.0",
     "vue": "^3.5.30",
     "vue-router": "^5.0.4"
   },
