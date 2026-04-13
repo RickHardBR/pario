@@ -6,7 +6,6 @@
         <div>
           <img src="../../../src/assets/images/logo3orange.png" alt="Logo Parió na cor laranja" />
         </div>
-        <p>Lanches Gourmet</p>
       </router-link>
 
       <!-- Navegação Desktop -->
