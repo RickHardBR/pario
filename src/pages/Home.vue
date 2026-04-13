@@ -241,25 +241,21 @@
             <div class="value-item__icon">🍔</div>
             <h4 class="value-item__title">Lanche Gourmet com 24 Opções</h4>
             <p class="value-item__text">Cada lanche é uma receita pensada. Não copiamos — criamos.</p>
-            <p class="value-item__price">Valor: <strong> 25</strong></p>
           </div>
           <div class="value-item">
             <div class="value-item__icon">✅</div>
             <h4 class="value-item__title">Garantia de Qualidade 100%</h4>
             <p class="value-item__text">Se você não gostar, a gente refaz. Sem custo.</p>
-            <p class="value-item__price">Valor: <strong> 20</strong></p>
           </div>
           <div class="value-item">
             <div class="value-item__icon">💬</div>
             <h4 class="value-item__title">Atendimento Personalizado</h4>
             <p class="value-item__text">Você fala o que quer, a gente cria.</p>
-            <p class="value-item__price">Valor: <strong> 15</strong></p>
           </div>
           <div class="value-item">
             <div class="value-item__icon">⚡</div>
             <h4 class="value-item__title">Entrega Rápida e Fresca</h4>
             <p class="value-item__text">Preparado na hora, entregue quente.</p>
-            <p class="value-item__price">Valor: <strong> 10</strong></p>
           </div>
         </div>
       </div>
