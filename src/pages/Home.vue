@@ -108,10 +108,10 @@
           <div class="products-grid">
             <div v-for="product in destaques" :key="product.id" class="product-card product-card--destaque">
               <!-- Product Image (APENAS Lanches) -->
-              <div v-if="product.category_name === 'Lanches' && product.image_url" class="product-image">
+              <!-- <div v-if="product.category_name === 'Lanches' && product.image_url" class="product-image">
                 <img :src="product.image_url" :alt="product.name" loading="lazy" />
                 <div v-if="product.badge" class="product-badge">{{ product.badge }}</div>
-              </div>
+              </div> -->
 
               <!-- Product Content (Simplificado) -->
               <div class="product-content">
