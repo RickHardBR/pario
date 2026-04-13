@@ -721,7 +721,9 @@ p {
 
 /* --- HERO SECTION --- */
 .hero {
-  background: linear-gradient(135deg, var(--color-orange) 0%, var(--color-dark-gray) 100%);
+  background-image: url('../assets/images/background_bg.jpg'), linear-gradient(135deg, var(--color-orange) 0%, var(--color-dark-gray) 100%);
+  background-size: cover;
+  background-position: center;
   color: var(--color-white);
   padding: 100px 0;
   display: flex;
@@ -763,6 +765,8 @@ p {
   font-size: 18px;
   line-height: 1.8;
   margin-bottom: 30px;
+  font-weight: 400;
+  text-align: justify;
 }
 
 .hero__cta {
@@ -830,6 +834,7 @@ p {
 
 .problem__container {
   max-width: 900px;
+  text-align: justify;
 }
 
 .problem__title {
