@@ -42,6 +42,10 @@ const props = defineProps({
   selectedSize: {
     type: Object,
     default: null
+  },
+  productName: {
+    type: String,
+    default: ''
   }
 });
 
@@ -52,14 +56,29 @@ const allAdditionalsLoaded = ref(false);
 const selectedAdditionals = ref([]);
 const additionalsTotal = ref(0);
 
-// Filtrar adicionais localmente baseado no tamanho
+// Filtrar adicionais localmente baseado no tamanho e nome do produto
 const filteredAdditionals = computed(() => {
+  // Se for pizza doce (ex: Chocolate), não adicionar Catupiry, Cheddar ou Cream Cheese
+  const isDoce = props.productName.toLowerCase().includes('chocolate') || 
+                 props.productName.toLowerCase().includes('doce') ||
+                 props.productName.toLowerCase().includes('brigadeiro') ||
+                 props.productName.toLowerCase().includes('confete');
+
+  let baseAdditionals = allAdditionals.value;
+
+  if (isDoce) {
+    baseAdditionals = baseAdditionals.filter(extra => {
+      const extraName = extra.name.toLowerCase();
+      return !extraName.includes('catupiry') && !extraName.includes('cheddar') && !extraName.includes('cream cheese');
+    });
+  }
+
   if (!props.selectedSize || !props.selectedSize.name) {
-    return allAdditionals.value;
+    return baseAdditionals;
   }
   
   const sizeName = props.selectedSize.name.toLowerCase();
-  return allAdditionals.value.filter(extra => 
+  return baseAdditionals.filter(extra => 
     extra.name.toLowerCase().includes(sizeName)
   );
 });

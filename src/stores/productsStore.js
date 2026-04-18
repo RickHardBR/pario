@@ -13,7 +13,8 @@ export const useProductsStore = defineStore('products', {
     extras: [],
     pizzaSizes: [],
     pizzaCategories: [],
-    pizzaPrices: []
+    pizzaPrices: [],
+    saboresBebidas: []
   }),
 
   getters: {
@@ -167,6 +168,22 @@ export const useProductsStore = defineStore('products', {
       }
     },
 
+    async fetchSabores() {
+      try {
+        const { data, error } = await supabase
+          .from('sabores_bebidas')
+          .select('*')
+          .eq('is_active', true)
+          .order('name', { ascending: true });
+
+        if (error) throw error;
+        this.saboresBebidas = data || [];
+      } catch (err) {
+        console.error('Erro ao buscar sabores das bebidas:', err.message);
+        this.saboresBebidas = [];
+      }
+    },
+
 async fetchAllProducts() {
   this.loading = true;
   this.error = null;
@@ -177,7 +194,8 @@ async fetchAllProducts() {
     await Promise.all([
       this.fetchCategories(),
       this.fetchProducts(),
-      this.fetchExtras()
+      this.fetchExtras(),
+      this.fetchSabores()
     ]);
 
     // Agrupar produtos por categoria
@@ -213,6 +231,7 @@ async fetchAllProducts() {
       this.pizzaSizes = [];
       this.pizzaCategories = [];
       this.pizzaPrices = [];
+      this.saboresBebidas = [];
       this.error = null;
     }
   }

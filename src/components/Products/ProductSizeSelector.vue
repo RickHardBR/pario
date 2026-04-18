@@ -23,6 +23,7 @@
       :product-id="product.id"
       :category-id="product.category_id"
       :selected-size="selectedSize"
+      :product-name="product.name"
       @update:additionals="(additionals) => handleAdditionalsUpdate(additionals)"
       @update:additionalsTotal="(total) => handleAdditionalsTotal(total)"
     />

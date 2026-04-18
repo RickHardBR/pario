@@ -115,7 +115,10 @@
 
               <!-- Product Content (Simplificado) -->
               <div class="product-content">
-                <h4 class="product-name">{{ product.name }}</h4>
+                <h4 class="product-name">
+  {{ product.name }}
+  <span v-if="!product.active" class="out-of-stock-title-badge">(Esgotado)</span>
+</h4>
                 <p class="product-description">{{ product.description }}</p>
 
               </div>
@@ -156,27 +159,51 @@
 
                         <!-- Product Content -->
                         <div class="product-content">
-                          <h4 class="product-name">{{ product.name }}</h4>
+                          <div class="product-header">
+                            <h4 class="product-name">
+  {{ product.name }}
+  <span v-if="!product.active" class="out-of-stock-title-badge">(Esgotado)</span>
+</h4>
+                            <button @click="togglePizza(product.id)" class="pizza-toggle-btn">
+                              <svg v-if="openedPizzaId !== product.id" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-orange, #D4511A)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                              </svg>
+                              <svg v-else width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                              </svg>
+                            </button>
+                          </div>
+                          
                           <p class="product-description">{{ product.description }}</p>
 
-                          <!-- APENAS UM ProductSizeSelector para Pizzas -->
-                          <ProductSizeSelector :product="product"
-                            @update:selectedSize="(size) => handleSizeSelected(product.id, size)"
-                            @update:totalPrice="(price) => handlePriceUpdate(product.id, price)" />
+                          <!-- Corpo Colapsável -->
+                          <div v-show="openedPizzaId === product.id" class="product-details-collapsible">
+                            <template v-if="product.active">
+                              <!-- APENAS UM ProductSizeSelector para Pizzas -->
+                              <ProductSizeSelector :product="product"
+                                @update:selectedSize="(size) => handleSizeSelected(product.id, size)"
+                                @update:totalPrice="(price) => handlePriceUpdate(product.id, price)" />
 
-                          <!-- Quantity Selector -->
-                          <div class="quantity-selector">
-                            <button @click="decrementQuantity(product.id)" class="qty-btn">−</button>
-                            <input :id="`qty-${product.id}`" v-model.number="quantities[product.id]" type="number"
-                              min="0" readonly class="qty-input" />
-                            <button @click="incrementQuantity(product.id)" class="qty-btn">+</button>
+
+                              <!-- Quantity Selector -->
+                              <div class="quantity-selector">
+                                <button @click="decrementQuantity(product.id)" class="qty-btn">−</button>
+                                <input :id="`qty-${product.id}`" v-model.number="quantities[product.id]" type="number"
+                                  min="0" readonly class="qty-input" />
+                                <button @click="incrementQuantity(product.id)" class="qty-btn">+</button>
+                              </div>
+
+                              <!-- Add to Cart Button -->
+                              <button @click="handleAddToCart(product)" class="btn btn--primary btn--small"
+                                :disabled="(quantities[product.id] || 0) === 0">
+                                Adicionar ao Carrinho
+                              </button>
+                            </template>
+                            <div v-else class="out-of-stock-msg">
+                              Produto Esgotado
+                            </div>
                           </div>
-
-                          <!-- Add to Cart Button -->
-                          <button @click="handleAddToCart(product)" class="btn btn--primary btn--small"
-                            :disabled="(quantities[product.id] || 0) === 0">
-                            Adicionar ao Carrinho
-                          </button>
                         </div>
                       </div>
                     </div>
@@ -196,33 +223,108 @@
 
                   <!-- Product Content -->
                   <div class="product-content">
-                    <h4 class="product-name">{{ product.name }}</h4>
-                    <p class="product-description">{{ product.description }}</p>
+                    <!-- ACORDEÃO PARA PANQUECAS -->
+                    <template v-if="category.name === 'Panquecas'">
+                      <div class="product-header">
+                        <h4 class="product-name">
+  {{ product.name }}
+  <span v-if="!product.active" class="out-of-stock-title-badge">(Esgotado)</span>
+</h4>
+                        <!-- Reutilizamos a função e variável criadas para a pizza: funciona igual -->
+                        <button @click="togglePizza(product.id)" class="pizza-toggle-btn">
+                          <svg v-if="openedPizzaId !== product.id" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-orange, #D4511A)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                          </svg>
+                          <svg v-else width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                          </svg>
+                        </button>
+                      </div>
+                      
+                      <p class="product-description">{{ product.description }}</p>
 
-                    <!-- Price para NÃO PIZZAS -->
-                    <div class="product-price">
-                      {{ formatPrice(product.price) }}
-                    </div>
+                      <!-- Corpo Colapsável -->
+                      <div v-show="openedPizzaId === product.id" class="product-details-collapsible">
+                        <div class="product-price">
+                          {{ formatPrice(product.price) }}
+                        </div>
 
-                    <!-- Quantity Selector -->
-                    <div class="quantity-selector">
-                      <button @click="decrementQuantity(product.id)" class="qty-btn">−</button>
-                      <input :id="`qty-${product.id}`" v-model.number="quantities[product.id]" type="number" min="0"
-                        readonly class="qty-input" />
-                      <button @click="incrementQuantity(product.id)" class="qty-btn">+</button>
-                    </div>
+                        <template v-if="product.active">
+                          <!-- Quantity Selector -->
+                          <div class="quantity-selector">
+                            <button @click="decrementQuantity(product.id)" class="qty-btn">−</button>
+                            <input :id="`qty-${product.id}`" v-model.number="quantities[product.id]" type="number" min="0"
+                              readonly class="qty-input" />
+                            <button @click="incrementQuantity(product.id)" class="qty-btn">+</button>
+                          </div>
 
-                    <!-- Adicionais APENAS para Panquecas -->
-                    <ProductAdditionalsSelector v-if="category.name === 'Panquecas'" :product-id="product.id"
-                      :category-id="product.category_id" :selected-size="null"
-                      @update:additionals="(additionals) => handleAdditionalsUpdate(product.id, additionals)"
-                      @update:additionalsTotal="(total) => handleAdditionalsTotal(product.id, total)" />
+                          <!-- Adicionais APENAS para Panquecas -->
+                          <ProductAdditionalsSelector :product-id="product.id"
+                            :category-id="product.category_id" :selected-size="null" :product-name="product.name"
+                            @update:additionals="(additionals) => handleAdditionalsUpdate(product.id, additionals)"
+                            @update:additionalsTotal="(total) => handleAdditionalsTotal(product.id, total)" />
 
-                    <!-- Add to Cart Button -->
-                    <button @click="handleAddToCart(product)" class="btn btn--primary btn--small"
-                      :disabled="(quantities[product.id] || 0) === 0">
-                      Adicionar ao Carrinho
-                    </button>
+                          <!-- Add to Cart Button -->
+                          <button @click="handleAddToCart(product)" class="btn btn--primary btn--small"
+                            :disabled="(quantities[product.id] || 0) === 0">
+                            Adicionar ao Carrinho
+                          </button>
+                        </template>
+                        <div v-else class="out-of-stock-msg">
+                          Produto Esgotado
+                        </div>
+                      </div>
+                    </template>
+
+                    <!-- COMPORTAMENTO PADRÃO PARA OUTROS PRODUTOS -->
+                    <template v-else>
+                      <h4 class="product-name">
+  {{ product.name }}
+  <span v-if="!product.active" class="out-of-stock-title-badge">(Esgotado)</span>
+</h4>
+                      <p class="product-description">{{ product.description }}</p>
+
+                      <!-- SELETOR DE SABORES (Apenas Sucos Naturais ou Soda Italiana) -->
+                      <div v-if="product.name === 'Suco Natural' || product.name === 'Soda Italiana'" class="flavor-selector-container">
+                        <label class="pizza-size-label">Escolha o sabor:</label>
+                        <div class="custom-select-wrapper">
+                          <select v-model="selectedSabores[product.id]" class="custom-select">
+                            <option disabled :value="undefined">Selecione um sabor...</option>
+                            <option 
+                              v-for="sabor in productsStore.saboresBebidas.filter(s => s.product_id === product.id)" 
+                              :key="sabor.id" 
+                              :value="sabor">
+                              {{ sabor.name }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <!-- Price para NÃO PIZZAS -->
+                      <div class="product-price">
+                        {{ formatPrice(product.price) }}
+                      </div>
+
+                      <template v-if="product.active">
+                        <!-- Quantity Selector -->
+                        <div class="quantity-selector">
+                          <button @click="decrementQuantity(product.id)" class="qty-btn">−</button>
+                          <input :id="`qty-${product.id}`" v-model.number="quantities[product.id]" type="number" min="0"
+                            readonly class="qty-input" />
+                          <button @click="incrementQuantity(product.id)" class="qty-btn">+</button>
+                        </div>
+
+                        <!-- Add to Cart Button -->
+                        <button @click="handleAddToCart(product)" class="btn btn--primary btn--small"
+                          :disabled="(quantities[product.id] || 0) === 0">
+                          Adicionar ao Carrinho
+                        </button>
+                      </template>
+                      <div v-else class="out-of-stock-msg">
+                        Produto Esgotado
+                      </div>
+                    </template>
                   </div>
                 </div>
               </div>
@@ -342,7 +444,9 @@ const quantities = ref({});
 const productAdditionals = ref({});
 const selectedSizes = ref({});
 const selectedPrices = ref({});
+const selectedSabores = ref({});
 const MAX_QUANTITY_PER_PRODUCT = 10;
+const openedPizzaId = ref(null);
 
 // ===== STORES =====
 const router = useRouter();
@@ -519,6 +623,14 @@ const handleAddToCart = (product) => {
     }
   }
 
+  const isBebidaSabor = (product.name === 'Suco Natural' || product.name === 'Soda Italiana');
+  if (isBebidaSabor) {
+    if (!selectedSabores.value[product.id]) {
+      displayToast(`Por favor, selecione um sabor para o(a) ${product.name}`, 'error', 2000);
+      return;
+    }
+  }
+
   const productAdditionalsData = productAdditionals.value[product.id] || { additionals: [], total: 0 };
   const extras = productAdditionalsData.additionals.map(extra => ({
     id: extra.id,
@@ -526,12 +638,22 @@ const handleAddToCart = (product) => {
     price: extra.price
   }));
 
+  if (isBebidaSabor && selectedSabores.value[product.id]) {
+    const sabor = selectedSabores.value[product.id];
+    extras.push({
+      id: sabor.id,
+      name: `Sabor: ${sabor.name}`,
+      price: 0
+    });
+  }
+
   const variation = selectedSizes.value[product.id] || null;
 
   cartStore.addItem(product, quantity, variation, extras);
 
   quantities.value[product.id] = 0;
   productAdditionals.value[product.id] = { additionals: [], total: 0 };
+  selectedSabores.value[product.id] = null;
 
   displayToast(`${product.name} (${quantity}x) adicionado ao carrinho! 🎉`, 'success', 2500);
 };
@@ -557,6 +679,7 @@ const fetchDestaques = async () => {
         sales_count,
         category_id,
         pizza_category_id, 
+        active,
         categories(name)
       `)
       .or('is_destaque.eq.true,sales_count.gte.5')
@@ -575,6 +698,15 @@ const fetchDestaques = async () => {
     displayToast('Erro ao carregar destaques', 'error', 3000);
   } finally {
     isLoading.value = false;
+  }
+};
+
+// ===== FUNÇÕES DE PIZZA (ACCORDION) =====
+const togglePizza = (productId) => {
+  if (openedPizzaId.value === productId) {
+    openedPizzaId.value = null; // Fecha se já estiver aberto
+  } else {
+    openedPizzaId.value = productId; // Abre o novo, fecha o anterior
   }
 };
 
@@ -1183,6 +1315,69 @@ p {
   color: var(--color-white);
 }
 
+.pizza-size-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.flavor-selector-container {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Novo estilo elegante para os Selects */
+.custom-select-wrapper {
+  position: relative;
+  width: 80%; /* Menos largo que os 100% anteriores */
+  max-width: 250px; /* Limite máximo estético */
+}
+
+.custom-select-wrapper::after {
+  content: '▼';
+  font-size: 10px;
+  color: var(--color-orange, #D4511A);
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.custom-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 500;
+  color: #333;
+  background-color: #fff;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.custom-select:hover {
+  border-color: #d0d0d0;
+  background-color: #fafafa;
+}
+
+.custom-select:focus {
+  border-color: var(--color-orange, #D4511A);
+  box-shadow: 0 0 0 3px rgba(212, 81, 26, 0.15);
+}
+
 .calculation-label {
   font-size: 12px;
   font-weight: 600;
@@ -1485,6 +1680,33 @@ p {
   border-radius: 2px;
 }
 
+.skeleton-text {
+  height: 20px;
+  background: linear-gradient(90deg, #E0E0E0 25%, #F5F5F5 50%, #E0E0E0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+.out-of-stock-msg {
+  color: #c62828;
+  font-weight: bold;
+  font-size: 14px;
+  background-color: #ffebee;
+  padding: 8px;
+  text-align: center;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.out-of-stock-title-badge {
+  color: #c62828;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
 .pizza-group__divider {
   height: 1px;
   background: linear-gradient(90deg, #E0E0E0 0%, transparent 100%);
@@ -1541,5 +1763,49 @@ p {
     left: 16px;
     max-width: none;
   }
+}
+
+/* ===== PIZZA ACCORDION ===== */
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.product-header .product-name {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.pizza-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  margin-top: -2px;
+}
+
+.pizza-toggle-btn:hover {
+  background-color: rgba(212, 81, 26, 0.1);
+}
+
+.product-details-collapsible {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-top: 8px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>

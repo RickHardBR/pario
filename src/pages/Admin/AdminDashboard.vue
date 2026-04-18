@@ -35,6 +35,12 @@
   <button @click="activeTab = 'config'" :class="{ active: activeTab === 'config' }" class="tab-btn">
     <span class="icon">⚙️</span> Configurações
   </button>
+  <button @click="activeTab = 'stock'" :class="{ active: activeTab === 'stock' }" class="tab-btn">
+    <span class="icon">⚠️</span> Estoque
+  </button>
+  <button @click="activeTab = 'sabores'" :class="{ active: activeTab === 'sabores' }" class="tab-btn">
+    <span class="icon">🍹</span> Sabores
+  </button>
 </nav>
 
       <!-- Área de Conteúdo Dinâmico -->
@@ -43,7 +49,9 @@
         <OrdersManager v-if="activeTab === 'orders'" />
         <UsersManager v-if="activeTab === 'users'" />
         <DestaquesManager v-if="activeTab === 'destaques'" />
-        <ConfigManager v-if="activeTab === 'config'" /> <!-- NOVO -->
+        <ConfigManager v-if="activeTab === 'config'" />
+        <StockManager v-if="activeTab === 'stock'" />
+        <SaboresManager v-if="activeTab === 'sabores'" />
 
         <!-- Mensagem de Acesso Negado (Fallback) -->
         <div v-if="!authStore.isAdmin" class="access-denied">
@@ -67,6 +75,8 @@ import OrdersManager from './OrdersManager.vue';
 import UsersManager from './UsersManager.vue';
 import DestaquesManager from './DestaquesManager.vue';
 import ConfigManager from './ConfigManager.vue';
+import StockManager from './StockManager.vue';
+import SaboresManager from './SaboresManager.vue';
 
 const authStore = useAuthStore();
 const router = useRouter();
