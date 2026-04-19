@@ -42,7 +42,7 @@
     <div class="sabores-list">
       <div v-for="bebida in targetBebidas" :key="bebida.id" class="bebida-group">
         <h2>Sabores de {{ bebida.name }}</h2>
-        
+
         <table class="data-table">
           <thead>
             <tr>
@@ -117,7 +117,7 @@ const saveSabor = async () => {
     }]);
 
     if (error) throw error;
-    
+
     showAddForm.value = false;
     formData.value = { product_id: '', name: '', is_active: true };
     await carregarDados();
@@ -158,40 +158,208 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.sabores-manager { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
-.manager-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 2px solid #E0E0E0; padding-bottom: 20px;}
-.manager-header h1 { font-size: 28px; color: #D4511A; margin: 0; }
-.add-form { background-color: #F8F6F3; border-radius: 12px; padding: 24px; margin-bottom: 40px; border-left: 4px solid #D4511A; }
-.add-form h2 { margin-top: 0; }
-.form { display: flex; flex-direction: column; gap: 15px; max-width: 500px;}
-.form-group { display: flex; flex-direction: column; gap: 5px; }
-.form-group input, .form-group select { padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
-.form-group.checkbox { flex-direction: row; align-items: center; }
-.form-group.checkbox input { width: 16px; height: 16px; }
-.form-actions { display: flex; gap: 10px; margin-top: 10px; }
-.bebida-group { margin-bottom: 40px; }
-.bebida-group h2 { color: #333; margin-bottom: 15px; }
-.data-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-.data-table th, .data-table td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-.data-table th { background-color: #f9f9f9; font-weight: 600; }
-.text-center { text-align: center; color: #666; }
-.status-badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-.status-badge.active { background: #e8f5e9; color: #2e7d32; }
-.status-badge.inactive { background: #ffebee; color: #c62828; }
-.btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-.btn--primary { background: linear-gradient(135deg, #FFD700, #E6C200); color: black; }
-.btn--secondary { background: #666; color: white; }
-.btn--danger { background: #c62828; color: white; }
-.btn--small { padding: 5px 10px; font-size: 12px; }
+.sabores-manager {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.manager-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  border-bottom: 2px solid #E0E0E0;
+  padding-bottom: 20px;
+}
+
+.manager-header h1 {
+  font-size: 28px;
+  color: #D4511A;
+  margin: 0;
+}
+
+.add-form {
+  background-color: #F8F6F3;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 40px;
+  border-left: 4px solid #D4511A;
+}
+
+.add-form h2 {
+  margin-top: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 500px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.form-group.checkbox {
+  flex-direction: row;
+  align-items: center;
+}
+
+.form-group.checkbox input {
+  width: 16px;
+  height: 16px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.bebida-group {
+  margin-bottom: 40px;
+}
+
+.bebida-group h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.data-table th,
+.data-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.data-table th {
+  background-color: #f9f9f9;
+  font-weight: 600;
+}
+
+.text-center {
+  text-align: center;
+  color: #666;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status-badge.active {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge.inactive {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, #FFD700, #E6C200);
+  color: black;
+}
+
+.btn--secondary {
+  background: #666;
+  color: white;
+}
+
+.btn--danger {
+  background: #c62828;
+  color: white;
+}
+
+.btn--small {
+  padding: 5px 10px;
+  font-size: 12px;
+}
 
 /* Switch Toggle CSS */
-.switch { position: relative; display: inline-block; width: 50px; height: 26px; }
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #c62828; transition: .4s; }
-.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; }
-input:checked + .slider { background-color: #2e7d32; }
-input:focus + .slider { box-shadow: 0 0 1px #2e7d32; }
-input:checked + .slider:before { transform: translateX(24px); }
-.slider.round { border-radius: 34px; }
-.slider.round:before { border-radius: 50%; }
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #CCCCCC;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked+.slider {
+  background-color: #D4511A;
+}
+
+input:focus+.slider {
+  box-shadow: 0 0 1px #D4511A;
+}
+
+input:checked+.slider:before {
+  transform: translateX(24px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
 </style>
